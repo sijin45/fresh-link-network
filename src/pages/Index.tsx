@@ -8,6 +8,7 @@ import Products from '../components/Products';
 import SellForm from '../components/SellForm';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
+import PaymentModal from '../components/PaymentModal';
 import { Product, BillItem } from '../types';
 import { mockProducts } from '../data/products';
 
@@ -75,6 +76,12 @@ const Index = () => {
       <SellForm onAddProduct={addProduct} />
       <Contact />
       <Footer />
+      <PaymentModal 
+        onComplete={() => {
+          clearBill();
+          alert("Payment completed successfully!");
+        }} 
+      />
     </div>
   );
 };

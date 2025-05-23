@@ -1,57 +1,70 @@
 
 import { useState } from 'react';
-import { Menu, X } from 'lucide-react';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const scrollToSection = (sectionId: string) => {
-    const element = document.getElementById(sectionId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setIsMenuOpen(false);
+  
+  const toggleMenu = () => {
+    setIsMenuOpen(!isMenuOpen);
   };
-
+  
   return (
-    <header className="bg-green-700 text-white py-4 fixed w-full top-0 z-50 shadow-lg">
-      <nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center">
-          <div className="text-2xl font-bold">GreenLink</div>
+    <header className="bg-green-700 text-white sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-16">
+          <div className="flex-shrink-0 font-bold text-xl">GreenLink</div>
           
-          {/* Desktop Navigation */}
-          <ul className="hidden md:flex space-x-8">
-            <li><button onClick={() => scrollToSection('home')} className="hover:text-green-200 transition-colors">Home</button></li>
-            <li><button onClick={() => scrollToSection('about')} className="hover:text-green-200 transition-colors">About</button></li>
-            <li><button onClick={() => scrollToSection('features')} className="hover:text-green-200 transition-colors">Features</button></li>
-            <li><button onClick={() => scrollToSection('buy')} className="hover:text-green-200 transition-colors">Buy</button></li>
-            <li><button onClick={() => scrollToSection('sell')} className="hover:text-green-200 transition-colors">Sell</button></li>
-            <li><button onClick={() => scrollToSection('contact')} className="hover:text-green-200 transition-colors">Contact</button></li>
-          </ul>
-
           {/* Mobile menu button */}
-          <button 
-            className="md:hidden"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
-            {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4">
-            <ul className="space-y-2">
-              <li><button onClick={() => scrollToSection('home')} className="block w-full text-left py-2 hover:text-green-200 transition-colors">Home</button></li>
-              <li><button onClick={() => scrollToSection('about')} className="block w-full text-left py-2 hover:text-green-200 transition-colors">About</button></li>
-              <li><button onClick={() => scrollToSection('features')} className="block w-full text-left py-2 hover:text-green-200 transition-colors">Features</button></li>
-              <li><button onClick={() => scrollToSection('buy')} className="block w-full text-left py-2 hover:text-green-200 transition-colors">Buy</button></li>
-              <li><button onClick={() => scrollToSection('sell')} className="block w-full text-left py-2 hover:text-green-200 transition-colors">Sell</button></li>
-              <li><button onClick={() => scrollToSection('contact')} className="block w-full text-left py-2 hover:text-green-200 transition-colors">Contact</button></li>
-            </ul>
+          <div className="md:hidden">
+            <button 
+              type="button" 
+              className="text-white focus:outline-none"
+              onClick={toggleMenu}
+            >
+              <svg 
+                className="h-6 w-6" 
+                xmlns="http://www.w3.org/2000/svg" 
+                fill="none" 
+                viewBox="0 0 24 24" 
+                stroke="currentColor"
+              >
+                <path 
+                  strokeLinecap="round" 
+                  strokeLinejoin="round" 
+                  strokeWidth={2} 
+                  d={isMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} 
+                />
+              </svg>
+            </button>
           </div>
-        )}
-      </nav>
+          
+          {/* Desktop menu */}
+          <nav className="hidden md:block">
+            <ul className="flex space-x-6">
+              <li><a href="#home" className="hover:text-green-200 transition-colors">Home</a></li>
+              <li><a href="#about" className="hover:text-green-200 transition-colors">About</a></li>
+              <li><a href="#features" className="hover:text-green-200 transition-colors">Features</a></li>
+              <li><a href="#buy" className="hover:text-green-200 transition-colors">Buy</a></li>
+              <li><a href="#sell" className="hover:text-green-200 transition-colors">Sell</a></li>
+              <li><a href="#contact" className="hover:text-green-200 transition-colors">Contact</a></li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+      
+      {/* Mobile menu */}
+      {isMenuOpen && (
+        <div className="md:hidden">
+          <div className="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+            <a href="#home" className="block px-3 py-2 hover:bg-green-600 rounded-md">Home</a>
+            <a href="#about" className="block px-3 py-2 hover:bg-green-600 rounded-md">About</a>
+            <a href="#features" className="block px-3 py-2 hover:bg-green-600 rounded-md">Features</a>
+            <a href="#buy" className="block px-3 py-2 hover:bg-green-600 rounded-md">Buy</a>
+            <a href="#sell" className="block px-3 py-2 hover:bg-green-600 rounded-md">Sell</a>
+            <a href="#contact" className="block px-3 py-2 hover:bg-green-600 rounded-md">Contact</a>
+          </div>
+        </div>
+      )}
     </header>
   );
 };

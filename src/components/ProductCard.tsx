@@ -8,47 +8,45 @@ interface ProductCardProps {
 }
 
 const ProductCard = ({ product, onAddToBill }: ProductCardProps) => {
-  const [quantity, setQuantity] = useState<string>('');
+  const [quantity, setQuantity] = useState<number>(0);
   const [unit, setUnit] = useState<string>('kg');
 
   const handleAddToBill = () => {
-    const quantityNum = parseFloat(quantity);
-    if (!quantityNum || quantityNum <= 0) {
+    if (quantity <= 0) {
       alert("Please enter a valid quantity.");
       return;
     }
-    
-    onAddToBill(product.id, quantityNum, unit);
-    setQuantity('');
+    onAddToBill(product.id, quantity, unit);
+    setQuantity(0);
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
+    <div className="bg-white rounded-lg shadow-md overflow-hidden">
       <img 
         src={product.image} 
-        alt={product.alt}
+        alt={product.alt} 
         className="w-full h-48 object-cover"
       />
       <div className="p-4">
-        <h3 className="text-lg font-semibold mb-2 text-green-700">{product.name}</h3>
-        <p className="text-gray-600 text-sm mb-3">{product.description}</p>
-        <p className="text-lg font-bold text-green-600 mb-2">₹{product.price}/kg</p>
-        <p className="text-sm text-gray-500 mb-4">Available: {product.quantity.toFixed(2)}kg</p>
+        <h3 className="text-xl font-semibold mb-2 text-green-700">{product.name}</h3>
+        <p className="text-gray-600 mb-2">{product.description}</p>
+        <p className="font-medium mb-1">Price: ₹{product.price}/kg</p>
+        <p className="text-sm mb-4">Available: {product.quantity.toFixed(2)}kg</p>
         
-        <div className="flex gap-2 mb-4">
+        <div className="flex items-center gap-2 mb-4">
           <input
             type="number"
-            value={quantity}
-            onChange={(e) => setQuantity(e.target.value)}
             min="0"
             step="0.001"
-            placeholder="Quantity"
-            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            value={quantity || ''}
+            onChange={(e) => setQuantity(parseFloat(e.target.value) || 0)}
+            className="border rounded px-2 py-1 w-20 text-center"
+            placeholder="Qty"
           />
           <select
             value={unit}
             onChange={(e) => setUnit(e.target.value)}
-            className="px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
+            className="border rounded px-2 py-1"
           >
             <option value="kg">kg</option>
             <option value="g">g</option>
@@ -57,7 +55,7 @@ const ProductCard = ({ product, onAddToBill }: ProductCardProps) => {
         
         <button
           onClick={handleAddToBill}
-          className="w-full bg-green-600 hover:bg-green-700 text-white py-2 px-4 rounded-lg font-semibold transition-colors"
+          className="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded transition-colors"
         >
           Add to Bill
         </button>

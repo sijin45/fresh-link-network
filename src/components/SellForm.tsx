@@ -7,114 +7,135 @@ interface SellFormProps {
 }
 
 const SellForm = ({ onAddProduct }: SellFormProps) => {
-  const [formData, setFormData] = useState({
-    name: '',
-    description: '',
-    price: '',
-    quantity: '',
-    category: ''
-  });
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
-    setFormData(prev => ({
-      ...prev,
-      [e.target.name]: e.target.value
-    }));
-  };
+  const [name, setName] = useState('');
+  const [description, setDescription] = useState('');
+  const [price, setPrice] = useState<string>('');
+  const [quantity, setQuantity] = useState<string>('');
+  const [category, setCategory] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    const product = {
-      name: formData.name,
-      description: formData.description,
-      price: parseFloat(formData.price),
-      quantity: parseFloat(formData.quantity),
-      category: formData.category,
-      image: `https://source.unsplash.com/random/300x200/?${formData.category.toLowerCase()}`,
-      alt: `Fresh ${formData.name.toLowerCase()} from local farms`
+    const newProduct: Omit<Product, 'id'> = {
+      name,
+      description,
+      price: parseFloat(price),
+      quantity: parseFloat(quantity),
+      category,
+      image: `https://source.unsplash.com/random/300x200/?${category.toLowerCase()}`,
+      alt: `Fresh ${name.toLowerCase()} from local farms`
     };
-
-    onAddProduct(product);
-    alert(`Product "${product.name}" listed successfully!`);
-    setFormData({
-      name: '',
-      description: '',
-      price: '',
-      quantity: '',
-      category: ''
-    });
+    
+    onAddProduct(newProduct);
+    
+    // Reset form
+    setName('');
+    setDescription('');
+    setPrice('');
+    setQuantity('');
+    setCategory('');
   };
 
   return (
-    <section id="sell" className="py-16 bg-white">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h2 className="text-4xl font-bold text-center mb-12 text-green-700">Sell Your Products</h2>
+    <section id="sell" className="py-16">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <h2 className="text-4xl font-bold text-center mb-8 text-green-700">Sell Your Products</h2>
         
-        <form onSubmit={handleSubmit} className="max-w-2xl mx-auto space-y-6">
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-            placeholder="Product Name"
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div>
+            <label htmlFor="product-name" className="block text-sm font-medium text-gray-700 mb-1">
+              Product Name
+            </label>
+            <input
+              id="product-name"
+              type="text"
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+              placeholder="Enter product name"
+            />
+          </div>
           
-          <textarea
-            name="description"
-            value={formData.description}
-            onChange={handleChange}
-            placeholder="Product Description"
-            rows={4}
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+          <div>
+            <label htmlFor="product-description" className="block text-sm font-medium text-gray-700 mb-1">
+              Product Description
+            </label>
+            <textarea
+              id="product-description"
+              rows={4}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+              placeholder="Describe your product"
+            />
+          </div>
           
-          <input
-            type="number"
-            name="price"
-            value={formData.price}
-            onChange={handleChange}
-            placeholder="Price (INR)"
-            step="0.01"
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label htmlFor="product-price" className="block text-sm font-medium text-gray-700 mb-1">
+                Price (₹/kg)
+              </label>
+              <input
+                id="product-price"
+                type="number"
+                step="0.01"
+                min="0"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                placeholder="Enter price per kg"
+              />
+            </div>
+            
+            <div>
+              <label htmlFor="product-quantity" className="block text-sm font-medium text-gray-700 mb-1">
+                Quantity (kg)
+              </label>
+              <input
+                id="product-quantity"
+                type="number"
+                step="0.1"
+                min="0"
+                value={quantity}
+                onChange={(e) => setQuantity(e.target.value)}
+                required
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+                placeholder="Enter quantity in kg"
+              />
+            </div>
+          </div>
           
-          <input
-            type="number"
-            name="quantity"
-            value={formData.quantity}
-            onChange={handleChange}
-            placeholder="Quantity (kg)"
-            step="0.1"
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          />
+          <div>
+            <label htmlFor="product-category" className="block text-sm font-medium text-gray-700 mb-1">
+              Category
+            </label>
+            <select
+              id="product-category"
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+              required
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-green-500 focus:border-green-500"
+            >
+              <option value="" disabled>Select Category</option>
+              <option value="Fruits">Fruits</option>
+              <option value="Vegetables">Vegetables</option>
+              <option value="Dairy">Dairy</option>
+              <option value="Fertilizers">Fertilizers</option>
+              <option value="Manure">Manure</option>
+            </select>
+          </div>
           
-          <select
-            name="category"
-            value={formData.category}
-            onChange={handleChange}
-            required
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-green-500"
-          >
-            <option value="" disabled>Select Category</option>
-            <option value="Fruits">Fruits</option>
-            <option value="Vegetables">Vegetables</option>
-            <option value="Dairy">Dairy</option>
-            <option value="Fertilizers">Fertilizers</option>
-            <option value="Manure">Manure</option>
-          </select>
-          
-          <button
-            type="submit"
-            className="w-full bg-green-600 hover:bg-green-700 text-white py-3 px-4 rounded-lg font-semibold transition-colors"
-          >
-            List Product
-          </button>
+          <div>
+            <button
+              type="submit"
+              className="w-full bg-green-500 hover:bg-green-600 text-white font-medium py-2 px-4 rounded transition-colors"
+            >
+              List Product
+            </button>
+          </div>
         </form>
       </div>
     </section>
